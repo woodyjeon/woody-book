@@ -1,6 +1,19 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { isAxiosError } from "axios";
 import { authApi } from "../api/auth";
+
+function extractErrorMessage(err: unknown): string {
+  if (isAxiosError(err)) {
+    const detail = err.response?.data?.detail;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail) && detail[0]?.msg) {
+      return "입력값을 확인해주세요: " + detail.map((d) => d.msg).join(", ");
+    }
+    if (!err.response) return "서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.";
+  }
+  return "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.";
+}
 
 export function Register() {
   const navigate = useNavigate();
@@ -13,8 +26,8 @@ export function Register() {
     try {
       await authApi.register(form);
       navigate("/login");
-    } catch {
-      setError("이미 사용 중인 아이디 또는 이메일입니다.");
+    } catch (err) {
+      setError(extractErrorMessage(err));
     }
   };
 
@@ -25,7 +38,7 @@ export function Register() {
         <input
           value={form.user_id}
           onChange={(e) => setForm({ ...form, user_id: e.target.value })}
-          placeholder="아이디 (5-20자, 영문/숫자/-_)"
+          placeholder="아이디 (5-20자, 소문자/숫자/-_)"
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         <input

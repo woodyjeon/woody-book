@@ -2,6 +2,11 @@
 
 [woody-book]책을 읽고, 별점을 남기고, 나만의 서재를 완성하는 도서 리뷰 플랫폼
 
+## 배포
+
+- 프론트엔드: https://woody-book-orcin.vercel.app
+- 백엔드 API: https://woody-book-api.onrender.com (`/docs`에서 API 문서 확인)
+
 ## 기술 스택
 
 | 영역 | 스택 |
