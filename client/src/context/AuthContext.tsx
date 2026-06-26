@@ -8,7 +8,7 @@ interface AuthContextValue {
   member: Member | undefined;
   isLoading: boolean;
   isLoggedIn: boolean;
-  applyTokens: (tokens: TokenPair) => void;
+  applyTokens: (tokens: TokenPair) => Promise<void>;
   logout: () => void;
 }
 
@@ -25,10 +25,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     retry: false,
   });
 
-  const applyTokens = (tokens: TokenPair) => {
+  const applyTokens = async (tokens: TokenPair) => {
     tokenStorage.setTokens(tokens);
     setHasToken(true);
-    queryClient.invalidateQueries({ queryKey: ["me"] });
+    // 로그인 직후 헤더가 즉시 로그인 상태로 보이도록, 화면 전환 전에 내 정보를 먼저 받아온다.
+    const me = await authApi.me().then((res) => res.data);
+    queryClient.setQueryData(["me"], me);
   };
 
   const logout = () => {

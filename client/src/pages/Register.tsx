@@ -19,15 +19,19 @@ export function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ user_id: "", password: "", email: "", nickname: "" });
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
     try {
       await authApi.register(form);
-      navigate("/login");
+      navigate("/login", { state: { registered: true } });
     } catch (err) {
       setError(extractErrorMessage(err));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -64,9 +68,10 @@ export function Register() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
-          className="rounded-full bg-violet-700 py-2.5 font-medium text-white hover:bg-violet-800"
+          disabled={isSubmitting}
+          className="rounded-full bg-violet-700 py-2.5 font-medium text-white hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          가입하기
+          {isSubmitting ? "가입 중..." : "가입하기"}
         </button>
       </form>
       <p className="mt-5 text-center text-sm text-stone-500">
