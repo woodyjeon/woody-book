@@ -6,7 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.db import get_db
+from app.core.deps import get_current_member_optional
 from app.models.book import Book, Genre
+from app.models.member import Member
 from app.models.review import Review
 from app.models.wish import Wish
 from app.schemas.book import BookDetail, BookListItem, PaginatedBooks
@@ -85,7 +87,11 @@ async def list_books(
 
 
 @router.get("/{book_id}", response_model=BookDetail)
-async def get_book(book_id: int, db: AsyncSession = Depends(get_db)) -> BookDetail:
+async def get_book(
+    book_id: int,
+    db: AsyncSession = Depends(get_db),
+    member: Member | None = Depends(get_current_member_optional),
+) -> BookDetail:
     book = await db.get(
         Book,
         book_id,
@@ -107,6 +113,11 @@ async def get_book(book_id: int, db: AsyncSession = Depends(get_db)) -> BookDeta
         )
     ).one()
     wish_count = await db.scalar(select(func.count()).where(Wish.book_id == book_id))
+    is_wished = False
+    if member is not None:
+        is_wished = (
+            await db.scalar(select(Wish).where(Wish.book_id == book_id, Wish.member_id == member.id))
+        ) is not None
 
     return BookDetail(
         id=book.id,
@@ -124,4 +135,5 @@ async def get_book(book_id: int, db: AsyncSession = Depends(get_db)) -> BookDeta
         avg_rating=round(float(avg_rating), 2),
         count_rating=count_rating,
         wish_count=wish_count or 0,
+        is_wished=is_wished,
     )

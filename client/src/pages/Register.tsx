@@ -23,6 +23,10 @@ export function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!form.user_id.trim() || !form.password.trim() || !form.email.trim() || !form.nickname.trim()) {
+      setError("모든 항목을 입력해주세요.");
+      return;
+    }
     setError(null);
     setIsSubmitting(true);
     try {
@@ -43,6 +47,7 @@ export function Register() {
           value={form.user_id}
           onChange={(e) => setForm({ ...form, user_id: e.target.value })}
           placeholder="아이디 (5-20자, 소문자/숫자/-_)"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         <input
@@ -50,6 +55,7 @@ export function Register() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           type="password"
           placeholder="비밀번호 (8-16자)"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         <input
@@ -57,12 +63,14 @@ export function Register() {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           type="email"
           placeholder="이메일"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         <input
           value={form.nickname}
           onChange={(e) => setForm({ ...form, nickname: e.target.value })}
           placeholder="닉네임"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}

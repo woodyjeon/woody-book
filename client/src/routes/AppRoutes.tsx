@@ -7,6 +7,7 @@ import { Login } from "../pages/Login";
 import { NotFound } from "../pages/NotFound";
 import { OAuthCallback } from "../pages/OAuthCallback";
 import { Register } from "../pages/Register";
+import { Wishlist } from "../pages/Wishlist";
 
 export function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export function AppRoutes() {
         <Route path="register" element={<Register />} />
         <Route path="oauth" element={<OAuthCallback />} />
         <Route path="books/:id" element={<BookDetail />} />
+        <Route path="wishlist" element={<Wishlist />} />
         <Route
           path="ranking"
           element={<BookListPage title="도서 순위" subtitle="평가 많은 책 순서" sort="count" showRank />}

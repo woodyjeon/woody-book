@@ -51,6 +51,29 @@ export interface BookDetail extends BookListItem {
   publishers: Publisher[];
   keywords: Keyword[];
   wish_count: number;
+  is_wished: boolean;
+}
+
+export interface WishStatus {
+  is_wished: boolean;
+}
+
+export interface WishedBook {
+  id: number;
+  title: string;
+  thumbnail: string | null;
+  category: string | null;
+  introduce: string | null;
+  is_adult: boolean;
+  authors: Author[];
+  genres: Genre[];
+}
+
+export interface PaginatedWishes {
+  items: WishedBook[];
+  page: number;
+  size: number;
+  total: number;
 }
 
 export interface PaginatedBooks {

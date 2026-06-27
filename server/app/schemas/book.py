@@ -58,6 +58,7 @@ class BookDetail(BaseModel):
     avg_rating: float
     count_rating: int
     wish_count: int
+    is_wished: bool
 
     model_config = {"from_attributes": True}
 

@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { booksApi } from "../api/books";
 import { CommentSection } from "../components/CommentSection";
 import { ReviewSection } from "../components/ReviewSection";
+import { Spinner } from "../components/Spinner";
+import { WishButton } from "../components/WishButton";
 
 export function BookDetail() {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +16,7 @@ export function BookDetail() {
     enabled: Number.isFinite(bookId),
   });
 
-  if (isLoading) return <p className="text-stone-500">불러오는 중...</p>;
+  if (isLoading) return <Spinner />;
   if (error || !book) return <p className="text-red-600">책을 찾을 수 없습니다.</p>;
 
   return (
@@ -35,10 +37,10 @@ export function BookDetail() {
             {book.publishers.length > 0 && ` · ${book.publishers.map((p) => p.name).join(", ")}`}
             {book.published_date && ` · ${book.published_date}`}
           </p>
-          <p className="mt-3 flex items-center gap-1.5 text-sm">
+          <p className="mt-3 flex items-center gap-2 text-sm">
             <span className="font-medium text-violet-700">★ {book.avg_rating.toFixed(1)}</span>
             <span className="text-stone-400">({book.count_rating}명 평가)</span>
-            <span className="text-stone-400">· 위시 {book.wish_count}</span>
+            <WishButton bookId={book.id} isWished={book.is_wished} wishCount={book.wish_count} />
           </p>
           {(book.genres.length > 0 || book.keywords.length > 0) && (
             <div className="mt-3 flex flex-wrap gap-1.5">

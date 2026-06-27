@@ -15,6 +15,10 @@ export function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!userId.trim() || !password.trim()) {
+      setError("아이디와 비밀번호를 입력해주세요.");
+      return;
+    }
     setError(null);
     setIsSubmitting(true);
     try {
@@ -41,6 +45,7 @@ export function Login() {
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           placeholder="아이디"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         <input
@@ -48,6 +53,7 @@ export function Login() {
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="비밀번호"
+          required
           className="rounded-xl border border-stone-200 px-4 py-2.5 text-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
@@ -66,8 +72,8 @@ export function Login() {
         </Link>
       </p>
       <div className="mt-4 rounded-xl bg-violet-50 px-4 py-3 text-center text-xs text-violet-700">
-        테스트 계정 — 아이디: <span className="font-semibold">test01</span> / 비밀번호:{" "}
-        <span className="font-semibold">test01</span>
+        테스트 계정 — 아이디: <span className="font-semibold">test_account1</span> / 비밀번호:{" "}
+        <span className="font-semibold">test_account1</span>
       </div>
     </div>
   );

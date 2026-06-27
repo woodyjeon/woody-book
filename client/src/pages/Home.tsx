@@ -3,6 +3,7 @@ import { booksApi } from "../api/books";
 import { BookRanking } from "../components/BookRanking";
 import { BookCarousel } from "../components/BookCarousel";
 import { PromoMarquee } from "../components/PromoMarquee";
+import { Spinner } from "../components/Spinner";
 
 export function Home() {
   const ranking = useQuery({
@@ -21,7 +22,7 @@ export function Home() {
   const isLoading = ranking.isLoading || bestseller.isLoading || recommend.isLoading;
   const error = ranking.error || bestseller.error || recommend.error;
 
-  if (isLoading) return <p className="text-stone-500">불러오는 중...</p>;
+  if (isLoading) return <Spinner />;
   if (error) return <p className="text-red-600">책 목록을 불러오지 못했습니다.</p>;
 
   return (

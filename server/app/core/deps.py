@@ -25,3 +25,17 @@ async def get_current_member(
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "사용자를 찾을 수 없습니다.")
 
     return member
+
+
+async def get_current_member_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    db: AsyncSession = Depends(get_db),
+) -> Member | None:
+    if credentials is None:
+        return None
+
+    payload = decode_token(credentials.credentials)
+    if payload is None or payload.get("type") != "access":
+        return None
+
+    return await db.get(Member, int(payload["sub"]))

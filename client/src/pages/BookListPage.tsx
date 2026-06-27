@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { booksApi, type ListBooksParams } from "../api/books";
 import { BookListRow } from "../components/BookListRow";
+import { Spinner } from "../components/Spinner";
 
 interface BookListPageProps {
   title: string;
@@ -47,7 +48,7 @@ export function BookListPage({ title, subtitle, sort, showRank }: BookListPagePr
       <h1 className="text-2xl font-bold text-stone-800">{title}</h1>
       {subtitle && <p className="mt-1 text-sm text-stone-500">{subtitle}</p>}
 
-      {isLoading && <p className="mt-6 text-stone-500">불러오는 중...</p>}
+      {isLoading && <Spinner className="mt-6" />}
       {error && <p className="mt-6 text-red-600">책 목록을 불러오지 못했습니다.</p>}
 
       {!isLoading && !error && (
@@ -60,7 +61,7 @@ export function BookListPage({ title, subtitle, sort, showRank }: BookListPagePr
       )}
 
       <div ref={sentinelRef} className="h-1" />
-      {isFetchingNextPage && <p className="py-4 text-center text-sm text-stone-400">불러오는 중...</p>}
+      {isFetchingNextPage && <Spinner className="py-4" />}
       {!hasNextPage && books.length > 0 && (
         <p className="py-4 text-center text-sm text-stone-400">마지막 책까지 모두 봤습니다.</p>
       )}

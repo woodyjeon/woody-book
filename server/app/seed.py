@@ -82,18 +82,18 @@ async def seed() -> None:
         else:
             print("책 데이터가 이미 존재해 건너뜁니다.")
 
-        test_member = await db.scalar(select(Member).where(Member.user_id == "test_account"))
+        test_member = await db.scalar(select(Member).where(Member.user_id == "test_account1"))
         if test_member is None:
             db.add(
                 Member(
-                    user_id="test_account",
-                    password_hash=hash_password("test!1234"),
-                    nickname="테스트계정",
-                    email="test_account@example.com",
+                    user_id="test_account1",
+                    password_hash=hash_password("test_account1"),
+                    nickname="test_account1",
+                    email="test_account1@example.com",
                     platform=Platform.local,
                 )
             )
-            print("테스트 계정(test_account / test!1234)을 추가했습니다.")
+            print("테스트 계정(test_account1 / test_account1)을 추가했습니다.")
         else:
             print("테스트 계정이 이미 존재해 건너뜁니다.")
 
